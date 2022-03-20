@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+
+#------------------------- rabbitmq --------------------------
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: mt-demo.rabbitmq
+
+    restart: unless-stopped
+
+    ports:
+      - "4369:4369"
+      - "5672:5672" # rabbit msq queque
+      - "5671:5671"        
+      - "15691:15691"
+      - "15692:15692"
+      - "15671:15671"
+
+      - "15672:15672"  # Management
+
+      - "25672:25672"
+
+    networks:
+      - default
+
+    volumes:
+      - ~/Documents/Dev/MtDemo/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/Documents/Dev/MtDemo/rabbitmq/log/:/var/log/rabbitmq
+
+#------------------------ mongodb ---------------------------
+  
+  mongodb:
+    image : mongo
+    container_name: mt-demo.mongodb
+    environment:
+        - PUID=1000
+        - PGID=1000
+    volumes:
+        - 'mongodb-data:/data/db'
+
+    ports:
+        - 27017:27017
+
+    networks:
+      - default
+
+    restart: unless-stopped
+
+
+volumes:
+  mongodb-data:
